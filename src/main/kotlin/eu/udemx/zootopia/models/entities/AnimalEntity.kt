@@ -1,7 +1,7 @@
 package eu.udemx.zootopia.models.entities
 
+import jakarta.annotation.Nullable
 import jakarta.persistence.*
-import java.awt.Color
 
 @Entity
 @Table(name = "animals")
@@ -9,10 +9,11 @@ import java.awt.Color
 open class AnimalEntity(
     @Id val id: Long = 0,
     open val name: String = "",
-    @Column(name = "legs") open val numberOfLegs: Short = 0,
+    //@Column(name = "legs") open val numberOfLegs: Short = 0,
     open val size: Short = 0,
-    open val color: Color = Color.WHITE,
+    open val age: Short = 0,
+    open val color: String = "",
     open val pattern: String = "",
-    open val feedingInterval: Byte = 0,
-    @ManyToMany open val predatorList: List<AnimalEntity> = emptyList()
+    @ManyToMany open val predatorList: List<AnimalEntity> = emptyList(),
+    @ManyToOne @Nullable open val enclosure: EnclosureEntity? = null
 )
