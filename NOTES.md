@@ -12,13 +12,14 @@
 - filters
 - 6-7 types of animals
   - with common and unique properties
+- feeding -> date @Converter
 
 ### Ideas:
 - Creational Patterns
-  - Builder?
+  - Builder or Factory
+    - for animal creation
 - Structural Patterns
   - Composites
-    - too complex
-    - We don't need nested enclosures
+    - for enclosures (enclosures inside exhibits inside parts of the zoo)
 - Behavioral Patterns
   - Iterator?
