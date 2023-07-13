@@ -1,7 +1,7 @@
 package eu.udemx.zootopia.services
 
 import eu.udemx.zootopia.models.entities.AnimalEntity
-import eu.udemx.zootopia.models.entities.EnclosureEntity
+import eu.udemx.zootopia.models.enums.AnimalType
 import eu.udemx.zootopia.models.repositories.AnimalRepository
 import eu.udemx.zootopia.models.repositories.EnclosureRepository
 import org.springframework.data.repository.findByIdOrNull
@@ -10,10 +10,11 @@ import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
 
 @Service
-class ZootopiaService(
+class AnimalService(
     val animalRepository: AnimalRepository<AnimalEntity>,
     val enclosureRepository: EnclosureRepository
 ) {
+
     fun getAllAnimals(): List<AnimalEntity> = animalRepository.findAll()
 
     fun getAnimalById(id: Long): AnimalEntity = animalRepository.findByIdOrNull(id) ?:
@@ -35,25 +36,6 @@ class ZootopiaService(
         return if (animalRepository.existsById(id)) {
             animal.id = id
             animalRepository.save(animal)
-        } else throw ResponseStatusException(HttpStatus.NOT_FOUND)
-    }
-
-    fun getAllEnclosures(): List<EnclosureEntity> = enclosureRepository.findAll()
-
-    fun getEnclosureById(id: Long): EnclosureEntity = enclosureRepository.findByIdOrNull(id) ?:
-        throw ResponseStatusException(HttpStatus.NOT_FOUND)
-
-    fun newEnclosure(enclosure: EnclosureEntity): EnclosureEntity = enclosureRepository.save(enclosure)
-
-    fun removeEnclosure(id: Long) {
-        if(enclosureRepository.existsById(id)) enclosureRepository.deleteById(id)
-        else throw ResponseStatusException(HttpStatus.NOT_FOUND)
-    }
-
-    fun updateEnclosure(id: Long, enclosure: EnclosureEntity): EnclosureEntity {
-        return if(animalRepository.existsById(id)) {
-            enclosure.id = id
-            enclosureRepository.save(enclosure)
         } else throw ResponseStatusException(HttpStatus.NOT_FOUND)
     }
 }
