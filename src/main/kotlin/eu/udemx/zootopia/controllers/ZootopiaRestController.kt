@@ -29,7 +29,7 @@ class ZootopiaRestController (
     @GetMapping("/animals/{id}")
     fun getAnimalById(@PathVariable id: Long) = animalService.getAnimalById(id)
 
-    @GetMapping("/animals/{type}")
+    @GetMapping("/animals/{typeString}")
     fun getAnimalByType(@PathVariable typeString: String): List<AnimalEntity> {
         val type = AnimalType.byNameIgnoreCaseOrNull(typeString)
         val service = type?.let { animalServiceFactory.getService(it) }
@@ -45,7 +45,7 @@ class ZootopiaRestController (
     @GetMapping("/enclosures/{id}/animals")
     fun getAnimalsByEnclosure(@PathVariable id: Long) = animalService.getAnimalsByEnclosure(id)
 
-    @GetMapping("/enclosures/{id}/animals/{type}")
+    @GetMapping("/enclosures/{id}/animals/{typeString}")
     fun getAnimalsByEnclosureAndType(@PathVariable id: Long, @PathVariable typeString: String): List<AnimalEntity> {
         val type = AnimalType.byNameIgnoreCaseOrNull(typeString)
         val service = type?.let { animalServiceFactory.getService(it) }
