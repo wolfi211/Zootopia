@@ -11,7 +11,7 @@ import org.springframework.web.server.ResponseStatusException
 
 @Service
 class ZootopiaService(
-    val animalRepository: AnimalRepository,
+    val animalRepository: AnimalRepository<AnimalEntity>,
     val enclosureRepository: EnclosureRepository
 ) {
     fun getAllAnimals(): List<AnimalEntity> = animalRepository.findAll()
