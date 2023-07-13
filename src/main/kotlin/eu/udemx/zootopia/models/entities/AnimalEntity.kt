@@ -16,14 +16,24 @@ import jakarta.persistence.*
     JsonSubTypes.Type(value = OmnivoreEntity::class, name = "OMNIVORE")
 )
 abstract class AnimalEntity(
-    @Id open var id: Long = 0,
+    @Id
+    open var id: Long = 0,
     open var name: String = "",
-    @ManyToOne @JoinColumn(name = "species_id") open var species: SpeciesEntity? = null,
-    //@Column(name = "legs") open var numberOfLegs: Short = 0,
+    @ManyToOne
+    @JoinColumn(name = "species_id")
+    open var species: SpeciesEntity? = null,
     open var size: Short = 0,
     open var age: Short = 0,
     open var color: String = "",
     open var pattern: String = "",
-    @ManyToMany open val predatorList: Set<AnimalEntity> = emptySet(),
-    @ManyToOne @Nullable open var enclosure: EnclosureEntity? = null
+    @ManyToMany
+    @JoinTable(
+        name = "prey_predators",
+        joinColumns = [JoinColumn(name = "prey_id")],
+        inverseJoinColumns = [JoinColumn(name = "predator_id")])
+    open val predators: Set<AnimalEntity> = emptySet(),
+    @ManyToOne
+    @JoinColumn(name = "enclosure_id")
+    @Nullable
+    open var enclosure: EnclosureEntity? = null
 )

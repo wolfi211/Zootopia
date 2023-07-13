@@ -7,5 +7,5 @@ import jakarta.persistence.ManyToMany
 @Entity
 @DiscriminatorValue("CARNIVORE")
 data class CarnivoreEntity(
-    @ManyToMany val preyList: List<AnimalEntity> = emptyList()
+    @ManyToMany(mappedBy = "predators") val preys: Set<AnimalEntity> = emptySet()
 ) : AnimalEntity()
