@@ -1,7 +1,6 @@
 package eu.udemx.zootopia.services
 
 import eu.udemx.zootopia.models.entities.AnimalEntity
-import eu.udemx.zootopia.models.enums.AnimalType
 import eu.udemx.zootopia.models.repositories.AnimalRepository
 import eu.udemx.zootopia.models.repositories.EnclosureRepository
 import org.springframework.data.repository.findByIdOrNull
