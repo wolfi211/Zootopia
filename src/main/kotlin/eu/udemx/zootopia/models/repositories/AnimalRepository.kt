@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface AnimalRepository<T: AnimalEntity>: JpaRepository<T, Long> {
+interface AnimalRepository<out T: AnimalEntity>: JpaRepository<@UnsafeVariance T, Long> {
     fun findAllByEnclosureId(id: Long): List<AnimalEntity>
 }
