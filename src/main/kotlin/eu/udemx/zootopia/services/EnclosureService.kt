@@ -26,8 +26,9 @@ class EnclosureService(
 
     fun updateEnclosure(id: Long, enclosure: EnclosureEntity): EnclosureEntity {
         return if(enclosureRepository.existsById(id)) {
-            enclosure.id = id
-            enclosureRepository.save(enclosure)
+            val original = enclosureRepository.findByIdOrNull(id)
+            original!!.name = enclosure.name
+            enclosureRepository.save(original)
         } else throw ResponseStatusException(HttpStatus.NOT_FOUND)
     }
 }
