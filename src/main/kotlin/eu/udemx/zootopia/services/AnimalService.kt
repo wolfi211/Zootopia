@@ -39,8 +39,11 @@ class AnimalService(
 
     fun updateAnimal(id: Long, animal: AnimalEntity): AnimalEntity {
         return if (animalRepository.existsById(id)) {
-            animal.id = id
-            animalRepository.save(animal)
+            if(isNotEligibleForEnclosure(animal)) {
+                animal.id = id
+                animalRepository.save(animal)
+            }
+            else throw ResponseStatusException(HttpStatus.CONFLICT)
         } else throw ResponseStatusException(HttpStatus.NOT_FOUND)
     }
 
