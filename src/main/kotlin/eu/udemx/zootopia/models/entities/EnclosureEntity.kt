@@ -2,6 +2,8 @@ package eu.udemx.zootopia.models.entities
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo
 import com.fasterxml.jackson.annotation.ObjectIdGenerators
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import eu.udemx.zootopia.services.utils.EnclosureSerializer
 import jakarta.persistence.*
 
 @Entity
@@ -9,6 +11,7 @@ import jakarta.persistence.*
 @JsonIdentityInfo(
     generator = ObjectIdGenerators.PropertyGenerator::class,
     property = "id")
+@JsonSerialize(using = EnclosureSerializer::class)
 data class EnclosureEntity (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
