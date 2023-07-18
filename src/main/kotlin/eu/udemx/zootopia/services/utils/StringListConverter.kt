@@ -1,8 +1,7 @@
-package eu.udemx.zootopia.services
+package eu.udemx.zootopia.services.utils
 
 import jakarta.persistence.AttributeConverter
 import jakarta.persistence.Converter
-import java.util.*
 
 @Converter
 class StringListConverter: AttributeConverter<List<String>, String> {
