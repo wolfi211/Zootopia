@@ -1,6 +1,7 @@
 package eu.udemx.zootopia.models.entities
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.annotation.ObjectIdGenerators
@@ -18,11 +19,12 @@ import jakarta.persistence.*
     JsonSubTypes.Type(value = OmnivoreEntity::class, name = "OMNIVORE"))
 @JsonIdentityInfo(
     generator = ObjectIdGenerators.PropertyGenerator::class,
-    property = "id")
+    property = "id",
+    )
 abstract class AnimalEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    open var id: Long = 0,
+    open var id: Long? = 0,
     open var name: String = "",
     @ManyToOne
     @JoinColumn(name = "species_id")
@@ -31,12 +33,6 @@ abstract class AnimalEntity(
     open var age: Short = 0,
     open var color: String = "",
     open var pattern: String = "",
-//    @ManyToMany
-//    @JoinTable(
-//        name = "prey_predators",
-//        joinColumns = [JoinColumn(name = "prey_id")],
-//        inverseJoinColumns = [JoinColumn(name = "predator_id")])
-//    open val predators: Set<AnimalEntity> = emptySet(),
     @ManyToOne
     @JoinColumn(name = "enclosure_id")
     @Nullable
