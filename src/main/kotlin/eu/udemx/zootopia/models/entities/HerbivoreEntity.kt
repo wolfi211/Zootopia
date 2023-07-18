@@ -1,6 +1,6 @@
 package eu.udemx.zootopia.models.entities
 
-import eu.udemx.zootopia.services.StringListConverter
+import eu.udemx.zootopia.services.utils.StringListConverter
 import jakarta.persistence.Column
 import jakarta.persistence.Convert
 import jakarta.persistence.DiscriminatorValue
@@ -12,5 +12,5 @@ import jakarta.persistence.Entity
 data class HerbivoreEntity(
     @Column(name = "herbivorediet")
     @Convert(converter = StringListConverter::class)
-    val dietList: List<String> = emptyList()
+    var dietList: List<String> = emptyList()
 ) : AnimalEntity()
