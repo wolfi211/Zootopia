@@ -2,11 +2,8 @@ package eu.udemx.zootopia.models.dtos
 
 import eu.udemx.zootopia.models.entities.AnimalEntity
 import eu.udemx.zootopia.models.entities.HerbivoreEntity
-import eu.udemx.zootopia.models.repositories.EnclosureRepository
-import eu.udemx.zootopia.models.repositories.SpeciesRepository
 import eu.udemx.zootopia.services.EnclosureService
 import eu.udemx.zootopia.services.SpeciesService
-import org.springframework.data.repository.findByIdOrNull
 
 data class HerbivoreDto(
     val name: String,

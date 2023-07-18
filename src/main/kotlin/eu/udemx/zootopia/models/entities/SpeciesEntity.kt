@@ -27,5 +27,5 @@ data class SpeciesEntity(
         joinColumns = [JoinColumn(name = "prey_id")],
         inverseJoinColumns = [JoinColumn(name = "predator_id")])
     @JsonIgnore
-    open val predators: Set<AnimalEntity> = emptySet(),
+    val predators: Set<AnimalEntity> = emptySet(),
 )
