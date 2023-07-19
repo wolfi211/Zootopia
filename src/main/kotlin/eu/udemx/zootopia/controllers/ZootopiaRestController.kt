@@ -1,6 +1,9 @@
 package eu.udemx.zootopia.controllers
 
 import eu.udemx.zootopia.models.dtos.AnimalDto
+import eu.udemx.zootopia.models.dtos.EnclosureDto
+import eu.udemx.zootopia.models.dtos.SpeciesDto
+import eu.udemx.zootopia.models.dtos.toEntity
 import eu.udemx.zootopia.models.entities.*
 import eu.udemx.zootopia.models.enums.AnimalType
 import eu.udemx.zootopia.services.AnimalService
@@ -72,10 +75,10 @@ class ZootopiaRestController (
     }
 
     @PostMapping("/enclosures")
-    fun createEnclosure(@RequestBody enclosure: EnclosureEntity) = enclosureService.newEnclosure(enclosure)
+    fun createEnclosure(@RequestBody enclosure: EnclosureDto) = enclosureService.newEnclosure(enclosure.toEntity())
 
     @PostMapping("/species")
-    fun createSpecies(@RequestBody species: SpeciesEntity) = speciesService.newSpecies(species)
+    fun createSpecies(@RequestBody species: SpeciesDto) = speciesService.newSpecies(species.toEntity())
 
     @DeleteMapping("/animals/{id}")
     fun deleteAnimal(@PathVariable id: Long) = animalService.removeAnimal(id)
