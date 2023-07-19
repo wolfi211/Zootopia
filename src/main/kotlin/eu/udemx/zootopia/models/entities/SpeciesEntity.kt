@@ -21,11 +21,7 @@ data class SpeciesEntity(
     @JoinColumn(name = "species_id")
     @JsonIgnore
     val animals: List<AnimalEntity> = emptyList(),
-    @ManyToMany
-    @JoinTable(
-        name = "prey_predators",
-        joinColumns = [JoinColumn(name = "prey_id")],
-        inverseJoinColumns = [JoinColumn(name = "predator_id")])
+    @ManyToMany(mappedBy = "preys")
     @JsonIgnore
-    val predators: Set<AnimalEntity> = emptySet(),
+    val predators: MutableList<CarnivoreEntity> = emptyList<CarnivoreEntity>().toMutableList(),
 )

@@ -13,7 +13,7 @@ data class CarnivoreDto(
     val color: String,
     val pattern: String,
     val enclosure: Long,
-    val preys: Set<Long>
+    val preys: List<Long>
 ): AnimalDto {
 
     override fun toEntity(speciesService: SpeciesService, enclosureService: EnclosureService): AnimalEntity {
@@ -26,7 +26,7 @@ data class CarnivoreDto(
         animal.species = speciesService.getSpeciesById(species)
         animal.enclosure = enclosureService.getEnclosureById(enclosure)
         preys.map { preyId ->
-            animal.preys.plus(speciesService.getSpeciesById(preyId))
+            speciesService.getSpeciesById(preyId)?.let { animal.preys.add(it) }
         }
         return animal
     }
