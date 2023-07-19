@@ -2,8 +2,7 @@ package eu.udemx.zootopia.services
 
 import eu.udemx.zootopia.models.entities.AnimalEntity
 import eu.udemx.zootopia.models.entities.CarnivoreEntity
-import eu.udemx.zootopia.models.entities.OmnivoreEntity
-import eu.udemx.zootopia.models.enums.AnimalType
+import eu.udemx.zootopia.models.entities.EnclosureEntity
 import eu.udemx.zootopia.models.repositories.AnimalRepository
 import eu.udemx.zootopia.models.repositories.EnclosureRepository
 import org.springframework.data.repository.findByIdOrNull
@@ -28,7 +27,7 @@ class AnimalService(
     }
 
     fun newAnimal(animal: AnimalEntity): AnimalEntity {
-        return if(isNotEligibleForEnclosure(animal)) animalRepository.save(animal)
+        return if(isEligibleForEnclosure(animal)) animalRepository.save(animal)
         else throw ResponseStatusException(HttpStatus.CONFLICT)
     }
 
@@ -39,7 +38,7 @@ class AnimalService(
 
     fun updateAnimal(id: Long, animal: AnimalEntity): AnimalEntity {
         return if (animalRepository.existsById(id)) {
-            if(isNotEligibleForEnclosure(animal)) {
+            if(isEligibleForEnclosure(animal)) {
                 animal.id = id
                 animalRepository.save(animal)
             }
@@ -47,35 +46,35 @@ class AnimalService(
         } else throw ResponseStatusException(HttpStatus.NOT_FOUND)
     }
 
-    fun isNotEligibleForEnclosure(animal: AnimalEntity): Boolean {
+    fun isEligibleForEnclosure(animal: AnimalEntity): Boolean {
         val enclosure = animal.enclosure ?: return true
 
+        if(isHuntedInEnclosure(enclosure, animal)) return false
+
+        return !(CarnivoreEntity::class.java.isAssignableFrom(animal::class.java) &&
+                isAnimalHuntingInEnclosure(enclosure, animal as CarnivoreEntity))
+    }
+
+    fun isHuntedInEnclosure(enclosure: EnclosureEntity, animal: AnimalEntity): Boolean {
         for(containedAnimal in enclosure.animalsContained) {
-            if(AnimalType.fromEntityClassOrNull(containedAnimal) == AnimalType.CARNIVORE) {
-                for(prey in (containedAnimal as CarnivoreEntity).preys) {
-                    if(animal.species!!.id == prey.id) return false
-                }
-            } else if (AnimalType.fromEntityClassOrNull(containedAnimal) == AnimalType.OMNIVORE) {
-                for(prey in (containedAnimal as OmnivoreEntity).preys) {
-                    if(animal.species!!.id == prey.id) return false
-                }
-            }
+            if(CarnivoreEntity::class.java.isAssignableFrom(containedAnimal::class.java) &&
+                isAnimalHuntingOther(containedAnimal as CarnivoreEntity, animal))
+                return true
         }
+        return false
+    }
 
-        if(AnimalType.fromEntityClassOrNull(animal) == AnimalType.CARNIVORE) {
-            for(prey in (animal as CarnivoreEntity).preys) {
-                for(containedAnimal in enclosure.animalsContained) {
-                    if(prey.id == containedAnimal.species!!.id) return false
-                }
-            }
-        } else if(AnimalType.fromEntityClassOrNull(animal) == AnimalType.OMNIVORE) {
-            for(prey in (animal as OmnivoreEntity).preys) {
-                for(containedAnimal in enclosure.animalsContained) {
-                    if(prey.id == containedAnimal.species!!.id) return false
-                }
-            }
+    fun isAnimalHuntingOther(hunter: CarnivoreEntity, other: AnimalEntity): Boolean {
+        for(prey in hunter.preys) {
+            if(other.species!!.id == prey.id) return true
         }
+        return false
+    }
 
-        return true
+    fun isAnimalHuntingInEnclosure(enclosure: EnclosureEntity, animal: CarnivoreEntity): Boolean {
+        for(containedAnimal in enclosure.animalsContained) {
+            if(isAnimalHuntingOther(animal, containedAnimal)) return true
+        }
+        return false
     }
 }
